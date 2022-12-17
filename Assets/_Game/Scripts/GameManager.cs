@@ -35,6 +35,35 @@ namespace _Game.Scripts
             uiManager.Initialize();
         }
 
+        private void Update()
+        {
+            DebugControl();
+        }
+
+        private void DebugControl()
+        {
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                levelIndex = Mathf.Clamp(normalizedLevelIndex, 0, 1000000);
+                PlayerPrefs.SetInt("LevelIndex", levelIndex);
+                PlayerPrefs.Save();
+
+                DOTween.KillAll();
+                DOTween.Clear();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                levelIndex = Mathf.Clamp(levelIndex - 1, 0, 1000000);
+                PlayerPrefs.SetInt("LevelIndex", levelIndex);
+                PlayerPrefs.Save();
+
+                DOTween.KillAll();
+                DOTween.Clear();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+
         public void HandleLevelComplete()
         {
             if (isGameOver)

@@ -23,7 +23,7 @@ namespace _Game.Scripts
             {
                 voxel.isCollected = true;
                 voxel.gameObject.layer = LayerMask.NameToLayer("CollectedVoxel");
-                voxel.meshRenderer.sharedMaterial.color = color;
+                voxel.meshRenderer.material.color = color;
                 
                 
                 voxel.rb.AddForce((transform.position - voxel.transform.position) * forceToOrigin, ForceMode.Impulse);

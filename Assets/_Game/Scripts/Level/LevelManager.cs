@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using _Game.Scripts.Pool;
+using Cinemachine.Utility;
+using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _Game.Scripts.Level
 {
@@ -14,12 +17,28 @@ namespace _Game.Scripts.Level
         public List<GameObject> voxels;
         public int voxelCount;
 
-        private void Start()
+        public float timer = 10f;
+        public float voxelSpawnDelayTime = 0.1f;
+
+        public void Initialize()
         {
-            GenerateLevel();
+            switch (gameManager.gameMode)
+            {
+                case GameManager.GameMode.STANDARD:
+                    GenerateStandardLevel();
+                    break;
+                
+                case GameManager.GameMode.TIME:
+                    
+                    break;
+                
+                case GameManager.GameMode.AI:
+                    GenerateAILevel();
+                    break;
+            }
         }
 
-        private void GenerateLevel()
+        private void GenerateStandardLevel()
         {
             int currentLevelIndex =  gameManager.levelIndex % baseLevelData.levels.Count;
             LevelData currentLevelData = baseLevelData.levels[currentLevelIndex];
@@ -50,6 +69,25 @@ namespace _Game.Scripts.Level
             }
 
             voxelCount = voxels.Count;
+        }
+
+        public void GenerateTimerLevel()
+        {
+            DOVirtual.DelayedCall(voxelSpawnDelayTime, () =>
+            {
+                GameObject voxel = PoolManager.Instance.Pool.Get();
+                voxelOrigin.transform.localPosition = Vector3.zero;
+                voxel.transform.parent = voxelOrigin;
+                voxel.transform.localPosition =
+                    (Random.insideUnitSphere * 2f).ProjectOntoPlane(Vector3.up) + 5f * Vector3.up;
+
+                voxels.Add(voxel);
+            }).SetLoops(Mathf.RoundToInt(timer / voxelSpawnDelayTime));
+        }
+
+        private void GenerateAILevel()
+        {
+            
         }
     }
 }

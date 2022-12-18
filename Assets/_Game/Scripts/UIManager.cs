@@ -16,16 +16,14 @@ namespace _Game.Scripts
         private GameManager gameManager;
         private bool isInitialized;
         public bool isSettingUIEnabled;
-        private float timer = 10f;
+        private float timer;
         
         [Space(10)]
         [Header("Texts")]
         [SerializeField] private TextMeshProUGUI progressBarLevelStartText;
         [SerializeField] private TextMeshProUGUI progressBarLevelEndText;
-        [SerializeField] private TextMeshProUGUI tutorialText; 
         public TextMeshProUGUI gameplayMoneyBarText; 
-        [SerializeField] private TextMeshProUGUI bonusLevelMoneyBarText; 
-        [SerializeField] private TextMeshProUGUI bonusLevelTimerText; 
+        [SerializeField] private TextMeshProUGUI timerText; 
         public TextMeshProUGUI levelCompleteText;
         
         [Space(10)]
@@ -52,8 +50,13 @@ namespace _Game.Scripts
         [Space(10)]
         [Header("UIs")]
         [SerializeField] private GameObject settingUI;
-        [SerializeField] private GameObject bonusLevelUI;
-        [SerializeField] private GameObject gameplayUI;
+        [SerializeField] private GameObject timerUI;
+        [SerializeField] private GameObject standardGameModeUI;
+        [SerializeField] private GameObject timerGameModeUI;
+        [SerializeField] private GameObject aiGameModeUI;
+        [SerializeField] private GameObject standardTutorialUI;
+        [SerializeField] private GameObject timerTutorialUI;
+        [SerializeField] private GameObject aiTutorialUI;
         [SerializeField] private GameObject settingBackgroundUI;
         public CanvasGroup levelCompletedScreenUI;
         public GameObject levelCompletedConfetti;
@@ -63,6 +66,18 @@ namespace _Game.Scripts
         public void Initialize()
         {
             gameManager = FindObjectOfType<GameManager>();
+            
+            resetButton.gameObject.SetActive(false);
+            settingUI.SetActive(false);
+            nextLevelButton.gameObject.SetActive(false);
+            
+            totalMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount", 0);
+            gameplayMoneyBarText.text = totalMoneyAmount.ToString();
+            
+            settingButton.transform.DOScale(Vector3.one, 1f).OnComplete(() =>
+            {
+                settingButton.enabled = true;
+            });
             
             switch (gameManager.gameMode)
             {
@@ -76,6 +91,8 @@ namespace _Game.Scripts
                     InitializeAIGameMode();
                     break;
             }
+
+            timer = levelManager.timer;
 
             isInitialized = true;
         }
@@ -104,7 +121,10 @@ namespace _Game.Scripts
         public void StartGame()
         {
             resetButton.gameObject.SetActive(true);
-            tutorialText.gameObject.SetActive(false);
+            
+            standardTutorialUI.SetActive(false);
+            timerTutorialUI.SetActive(false);
+            aiTutorialUI.SetActive(false);
             
             DOVirtual.DelayedCall(2f, () =>
             {
@@ -118,42 +138,45 @@ namespace _Game.Scripts
 
             settingButton.enabled = false;
             settingButton.transform.DOScale(Vector3.zero, 1f);
+
+            if (gameManager.gameMode == GameManager.GameMode.TIME)
+            {
+                levelManager.GenerateTimerLevel();
+            }
         }
 
         #region INITIALIZEGAMEMODE
 
         private void InitializeStandardGameMode()
         {
-            totalMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount", 0);
-            gameplayMoneyBarText.text = totalMoneyAmount.ToString();
-            gameplayUI.SetActive(true);
+            timerUI.SetActive(false);
+            
             progressBarLevelStartText.text = (gameManager.normalizedLevelIndex).ToString();
             progressBarLevelEndText.text = (gameManager.normalizedLevelIndex + 1).ToString();
             progressBarFillImage.fillAmount = 0f;
             levelProgressRatio = 0f;
             
-            resetButton.gameObject.SetActive(false);
-            settingUI.SetActive(false);
-            
-            nextLevelButton.gameObject.SetActive(false);
-            
-            settingButton.transform.DOScale(Vector3.one, 1f).OnComplete(() =>
-            {
-                settingButton.enabled = true;
-            });
+            standardGameModeUI.SetActive(true);
         }
 
         private void InitializeTimeGameMode()
         {
-            bonusLevelUI.SetActive(true);
-            bonusLevelMoneyBarText.text = "0";
+            timerUI.SetActive(true);
+            
             float milliSeconds = (timer % 1) * 100;
-            bonusLevelTimerText.text = string.Format("{0:00}:{1:00}", timer, milliSeconds);
+            timerText.text = string.Format("{0:00}:{1:00}", timer, milliSeconds);
+            
+            timerGameModeUI.SetActive(true);
         }
 
         private void InitializeAIGameMode()
         {
+            timerUI.SetActive(true);
             
+            float milliSeconds = (timer % 1) * 100;
+            timerText.text = string.Format("{0:00}:{1:00}", timer, milliSeconds);
+            
+            aiGameModeUI.SetActive(true);
         }
 
         #endregion
@@ -167,8 +190,28 @@ namespace _Game.Scripts
 
         private void UpdateTimeGameMode()
         {
+            TimeCounter();
+
+            if (timer <= 0.001f)
+            {
+                gameManager.HandleLevelComplete();
+            }
+        }
+
+        private void UpdateAIGameMode()
+        {
+            TimeCounter();
+            
+            if (timer <= 0.001f)
+            {
+                gameManager.HandleLevelComplete();
+            }
+        }
+
+        private void TimeCounter()
+        {
             float milliSeconds = (timer % 1) * 100;
-            bonusLevelTimerText.text = string.Format("{0:00}:{1:00}", timer, milliSeconds);
+            timerText.text = string.Format("{0:00}:{1:00}", timer, milliSeconds);
                 
             timer -= Time.deltaTime;
             if (timer <= 0.01f)
@@ -177,14 +220,48 @@ namespace _Game.Scripts
             }
         }
 
-        private void UpdateAIGameMode()
-        {
-            
-        }
-
         #endregion
 
         #region BUTTONACTIONS
+
+        public void StandardGameModeButton()
+        {
+            PlayerPrefs.SetInt("LevelModeIndex", 0);
+            PlayerPrefs.Save();
+            
+            DOTween.KillAll();
+            DOTween.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
+        public void TimerGameModeButton()
+        {
+            PlayerPrefs.SetInt("LevelModeIndex", 1);
+            PlayerPrefs.Save();
+            
+            DOTween.KillAll();
+            DOTween.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
+        public void AIGameModeButton()
+        {
+            PlayerPrefs.SetInt("LevelModeIndex", 2);
+            PlayerPrefs.Save();
+            
+            DOTween.KillAll();
+            DOTween.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        
+        public void ClearPlayerPrefsButton()
+        {
+            PlayerPrefs.DeleteAll();
+            
+            DOTween.KillAll();
+            DOTween.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
 
         public void SettingButton()
         {

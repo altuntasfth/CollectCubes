@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts.Level;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,24 +17,42 @@ namespace _Game.Scripts
         }
 
         public GameMode gameMode;
-        
+
+        public LevelManager levelManager;
         public UIManager uiManager;
         public PlayerMechanic player;
-        public GameObject confetti;
         public Camera mainCamera;
         public bool isGameStarted;
         public bool isGameOver;
         
         public int levelIndex = 0;
         public int normalizedLevelIndex = 0;
+        public int levelModeIndex;
 
         private void Awake()
         {
+            Random.InitState(levelIndex * 5000);
             levelIndex = PlayerPrefs.GetInt("LevelIndex", 0);
             normalizedLevelIndex = levelIndex + 1;
-            Random.InitState(levelIndex * 5000);
+
+            levelModeIndex = PlayerPrefs.GetInt("LevelModeIndex", 0);
+
+            if (levelModeIndex == 0)
+            {
+                gameMode = GameMode.STANDARD;
+            }
+            else if (levelModeIndex == 1)
+            {
+                gameMode = GameMode.TIME;
+            }
+            else if (levelModeIndex == 2)
+            {
+                gameMode = GameMode.AI;
+            }
             
+            levelManager.Initialize();
             uiManager.Initialize();
+            
             player.Initialize();
         }
 
@@ -75,6 +94,8 @@ namespace _Game.Scripts
             
             isGameOver = true;
             
+            player.rb.velocity = Vector3.zero;
+            
             DOTween.KillAll();
             DOTween.Clear();
             
@@ -86,7 +107,6 @@ namespace _Game.Scripts
             PlayerPrefs.SetInt("LevelIndex", levelIndex + 1);
             PlayerPrefs.Save();
             
-            confetti.SetActive(true);
             uiManager.levelCompletedScreenUI.gameObject.SetActive(true);
             uiManager.levelCompletedConfetti.SetActive(true);
             DOVirtual.DelayedCall(2f, () =>

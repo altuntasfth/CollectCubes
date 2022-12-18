@@ -20,6 +20,9 @@ namespace _Game.Scripts.Level
         public float timer = 10f;
         public float voxelSpawnDelayTime = 0.1f;
 
+        public GameObject ai;
+        public GameObject aiCollector;
+
         public void Initialize()
         {
             switch (gameManager.gameMode)
@@ -73,21 +76,37 @@ namespace _Game.Scripts.Level
 
         public void GenerateTimerLevel()
         {
-            DOVirtual.DelayedCall(voxelSpawnDelayTime, () =>
-            {
-                GameObject voxel = PoolManager.Instance.Pool.Get();
-                voxelOrigin.transform.localPosition = Vector3.zero;
-                voxel.transform.parent = voxelOrigin;
-                voxel.transform.localPosition =
-                    (Random.insideUnitSphere * 2f).ProjectOntoPlane(Vector3.up) + 5f * Vector3.up;
-
-                voxels.Add(voxel);
-            }).SetLoops(Mathf.RoundToInt(timer / voxelSpawnDelayTime));
+            StartToSpawnVoxels(1);
         }
 
         private void GenerateAILevel()
         {
-            
+            StartToSpawnVoxels(3);
+        }
+
+        private void StartToSpawnVoxels(int spawnCountOnOneFrame)
+        {
+            DOVirtual.DelayedCall(voxelSpawnDelayTime, () =>
+            {
+                int xMultiplier = -8;
+                for (int i = 0; i < spawnCountOnOneFrame; i++)
+                {
+                    if (spawnCountOnOneFrame == 1)
+                    {
+                        xMultiplier = 0;
+                    }
+                    GameObject voxel = PoolManager.Instance.Pool.Get();
+                    voxelOrigin.transform.localPosition = Vector3.zero;
+                    voxel.transform.parent = voxelOrigin;
+                    voxel.transform.localPosition =
+                        (Random.insideUnitSphere * 2f).ProjectOntoPlane(Vector3.up) + 5f * Vector3.up +
+                        xMultiplier * Vector3.right;
+
+                    voxels.Add(voxel);
+
+                    xMultiplier += 8;
+                }
+            }).SetLoops(Mathf.RoundToInt(timer / voxelSpawnDelayTime));
         }
     }
 }

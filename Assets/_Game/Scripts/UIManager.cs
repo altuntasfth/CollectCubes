@@ -309,6 +309,9 @@ namespace _Game.Scripts
 
         public void NextLevelButton()
         {
+            PlayerPrefs.SetInt("LevelModeIndex", 0);
+            PlayerPrefs.Save();
+            
             nextLevelButton.enabled = false;
             gameManager.HandleLevelComplete();
         }

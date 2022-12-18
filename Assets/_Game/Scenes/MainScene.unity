@@ -1190,7 +1190,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.60214466, y: -0.000000055377036, z: 0.000000041765432, w: 0.79838705}
+  m_LocalRotation: {x: 0.60214466, y: 0.000000055377036, z: -0.000000041765432, w: 0.79838705}
   m_LocalPosition: {x: 0, y: 62.2, z: -21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1764,7 +1764,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BONUS LEVEL
+  m_text: AI LEVEL
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f49bd6b9cddf24a298e3c47148e33a6b, type: 2}
   m_sharedMaterial: {fileID: 1595363557050772861, guid: f49bd6b9cddf24a298e3c47148e33a6b,
@@ -1792,7 +1792,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.4
+  m_fontSize: 38.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3704,7 +3704,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6.99
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1107728510
 MeshRenderer:
@@ -3853,7 +3853,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113547569}
-  m_LocalRotation: {x: 0.60214466, y: -0.000000055377036, z: 0.000000041765432, w: 0.79838705}
+  m_LocalRotation: {x: 0.60214466, y: 0.000000055377036, z: -0.000000041765432, w: 0.79838705}
   m_LocalPosition: {x: 0, y: 62.2, z: -21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9841,6 +9841,8 @@ MonoBehaviour:
   voxelCount: 0
   timer: 10
   voxelSpawnDelayTime: 0.1
+  ai: {fileID: 0}
+  aiCollector: {fileID: 0}
 --- !u!4 &1406553301
 Transform:
   m_ObjectHideFlags: 0

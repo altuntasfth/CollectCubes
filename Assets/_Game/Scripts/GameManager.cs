@@ -18,6 +18,7 @@ namespace _Game.Scripts
         public GameMode gameMode;
         
         public UIManager uiManager;
+        public PlayerMechanic player;
         public GameObject confetti;
         public Camera mainCamera;
         public bool isGameStarted;
@@ -33,6 +34,7 @@ namespace _Game.Scripts
             Random.InitState(levelIndex * 5000);
             
             uiManager.Initialize();
+            player.Initialize();
         }
 
         private void Update()
@@ -78,7 +80,9 @@ namespace _Game.Scripts
             
             uiManager.progressBarFillImage.fillAmount = 1f;
             uiManager.levelCompleteText.text = "LEVEL " + normalizedLevelIndex + "\nCOMPLETED";
-            
+
+            int newMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount") + player.collectedVoxelCount;
+            PlayerPrefs.SetInt("TotalMoneyAmount", newMoneyAmount);
             PlayerPrefs.SetInt("LevelIndex", levelIndex + 1);
             PlayerPrefs.Save();
             

@@ -12,6 +12,7 @@ namespace _Game.Scripts.Level
         public Transform voxelOrigin;
 
         public List<GameObject> voxels;
+        public int voxelCount;
 
         private void Start()
         {
@@ -47,6 +48,8 @@ namespace _Game.Scripts.Level
 
                 x += currentLevelData.voxelOffset;
             }
+
+            voxelCount = voxels.Count;
         }
     }
 }

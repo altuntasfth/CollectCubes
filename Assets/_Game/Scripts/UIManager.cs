@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts.Level;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,8 @@ namespace _Game.Scripts
 {
     public class UIManager : MonoBehaviour
     {
-        
+        public LevelManager levelManager;
+        public PlayerMechanic player;
         public float levelProgressRatio;
         private GameManager gameManager;
         private bool isInitialized;
@@ -21,7 +23,7 @@ namespace _Game.Scripts
         [SerializeField] private TextMeshProUGUI progressBarLevelStartText;
         [SerializeField] private TextMeshProUGUI progressBarLevelEndText;
         [SerializeField] private TextMeshProUGUI tutorialText; 
-        [SerializeField] private TextMeshProUGUI gameplayMoneyBarText; 
+        public TextMeshProUGUI gameplayMoneyBarText; 
         [SerializeField] private TextMeshProUGUI bonusLevelMoneyBarText; 
         [SerializeField] private TextMeshProUGUI bonusLevelTimerText; 
         public TextMeshProUGUI levelCompleteText;
@@ -56,6 +58,8 @@ namespace _Game.Scripts
         public CanvasGroup levelCompletedScreenUI;
         public GameObject levelCompletedConfetti;
 
+        public int totalMoneyAmount;
+
         public void Initialize()
         {
             gameManager = FindObjectOfType<GameManager>();
@@ -78,7 +82,7 @@ namespace _Game.Scripts
 
         private void Update()
         {
-            if (!isInitialized || !gameManager.isGameStarted || gameManager.isGameOver)
+            if (!isInitialized || !gameManager.isGameStarted || gameManager.isGameOver || levelManager == null || player == null)
             {
                 return;
             }
@@ -120,6 +124,8 @@ namespace _Game.Scripts
 
         private void InitializeStandardGameMode()
         {
+            totalMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount", 0);
+            gameplayMoneyBarText.text = totalMoneyAmount.ToString();
             gameplayUI.SetActive(true);
             progressBarLevelStartText.text = (gameManager.normalizedLevelIndex).ToString();
             progressBarLevelEndText.text = (gameManager.normalizedLevelIndex + 1).ToString();
@@ -156,7 +162,7 @@ namespace _Game.Scripts
 
         private void UpdateStandardGameMode()
         {
-            progressBarFillImage.fillAmount = Mathf.Lerp(progressBarFillImage.fillAmount, levelProgressRatio, Time.smoothDeltaTime * 5f);
+            progressBarFillImage.fillAmount = Mathf.Lerp(progressBarFillImage.fillAmount, (float)player.collectedVoxelCount / (float)levelManager.voxelCount, Time.smoothDeltaTime * 5f);
         }
 
         private void UpdateTimeGameMode()

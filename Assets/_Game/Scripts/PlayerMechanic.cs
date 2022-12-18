@@ -7,7 +7,6 @@ namespace _Game.Scripts
     public class PlayerMechanic : MonoBehaviour
     {
         public float velocityMultiplier = 1500f;
-        public RectTransform draggingPlane;
         public Rigidbody rb;
         public int collectedVoxelCount;
         private GameManager gameManager;
@@ -21,16 +20,16 @@ namespace _Game.Scripts
 
         private void OnEnable()
         {
-            InputManager.PointerDown += HandleOnPointerDown;
-            InputManager.PointerDrag += HandleOnPointerDrag;
-            InputManager.PointerEnd += HandleOnPointerEnd;
+            InputManager.Instance.PointerDown += HandleOnPointerDown;
+            InputManager.Instance.PointerDrag += HandleOnPointerDrag;
+            InputManager.Instance.PointerEnd += HandleOnPointerEnd;
         }
 
         private void OnDisable()
         {
-            InputManager.PointerDown -= HandleOnPointerDown;
-            InputManager.PointerDrag += HandleOnPointerDrag;
-            InputManager.PointerEnd -= HandleOnPointerEnd;
+            InputManager.Instance.PointerDown -= HandleOnPointerDown;
+            InputManager.Instance.PointerDrag += HandleOnPointerDrag;
+            InputManager.Instance.PointerEnd -= HandleOnPointerEnd;
         }
 
         public void Initialize()
@@ -42,6 +41,11 @@ namespace _Game.Scripts
 
         private void Update()
         {
+            if (gameManager == null || uiManager == null || inputManager == null)
+            {
+                return;
+            }
+            
             if (!gameManager.isGameStarted || gameManager.isGameOver)
             {
                 return;
@@ -76,9 +80,12 @@ namespace _Game.Scripts
                 gameManager.isGameStarted = true;
             }
             
-            Vector2 localPoint = Vector2.zero;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out localPoint);
-            dragStartPosition = (localPoint.x) * Vector3.right + (localPoint.y) * Vector3.forward;
+            Vector3 inputViewport = gameManager.mainCamera.ScreenToViewportPoint(eventData.position) - Vector3.one * 0.5f;
+            dragStartPosition = inputViewport.x * Vector3.right + inputViewport.y * Vector3.forward;
+            
+            /*Vector2 localPoint = Vector2.zero;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(inputManager.draggingPlane, eventData.position, eventData.pressEventCamera, out localPoint);
+            dragStartPosition = (localPoint.x) * Vector3.right + (localPoint.y) * Vector3.forward;*/
             
             /*RaycastHit hit;
             Ray ray = gameManager.mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -87,9 +94,6 @@ namespace _Game.Scripts
             {
                 dragStartPosition = hit.point;
             }*/
-
-            /*Vector3 inputViewport = gameManager.mainCamera.ScreenToViewportPoint(eventData.position) - Vector3.one * 0.5f;
-            dragStartPosition = inputViewport.x * Vector3.right + inputViewport.y * Vector3.forward;*/
         }
 
         private void HandleOnPointerDrag(PointerEventData eventData)
@@ -99,9 +103,12 @@ namespace _Game.Scripts
                 return;
             }
             
-            Vector2 localPoint = Vector2.zero;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(draggingPlane, eventData.position, eventData.pressEventCamera, out localPoint);
-            dragEndPosition = (localPoint.x) * Vector3.right + (localPoint.y) * Vector3.forward;
+            Vector3 inputViewport = gameManager.mainCamera.ScreenToViewportPoint(eventData.position) - Vector3.one * 0.5f;
+            dragEndPosition = inputViewport.x * Vector3.right + inputViewport.y * Vector3.forward;
+            
+            // Vector2 localPoint = Vector2.zero;
+            // RectTransformUtility.ScreenPointToLocalPointInRectangle(inputManager.draggingPlane, eventData.position, eventData.pressEventCamera, out localPoint);
+            // dragEndPosition = (localPoint.x) * Vector3.right + (localPoint.y) * Vector3.forward;
             
             Vector3 dragDistance = (dragEndPosition - dragStartPosition);
             Vector3 dragDirection = dragDistance.normalized;

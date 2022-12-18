@@ -6,9 +6,25 @@ namespace _Game.Scripts
 {
     public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public static event Action<PointerEventData> PointerDown;
-        public static event Action<PointerEventData> PointerDrag;
-        public static event Action<PointerEventData> PointerEnd;
+        public RectTransform draggingPlane;
+
+        public event Action<PointerEventData> PointerDown;
+        public event Action<PointerEventData> PointerDrag;
+        public event Action<PointerEventData> PointerEnd;
+        
+        public static InputManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
 
         public void OnDrag(PointerEventData eventData)
         {

@@ -13,7 +13,8 @@ namespace _Game.Scripts
         {
             STANDARD,
             AI,
-            TIME
+            TIME,
+            AIObstacle
         }
 
         public GameMode gameMode;
@@ -28,6 +29,7 @@ namespace _Game.Scripts
         public int levelIndex = 0;
         public int normalizedLevelIndex = 0;
         public int levelModeIndex;
+        public GameObject obstacle;
 
         private void Awake()
         {
@@ -48,6 +50,11 @@ namespace _Game.Scripts
             else if (levelModeIndex == 2)
             {
                 gameMode = GameMode.AI;
+            }
+            else if (levelModeIndex == 3)
+            {
+                obstacle.SetActive(true);
+                gameMode = GameMode.AIObstacle;
             }
             
             levelManager.Initialize();

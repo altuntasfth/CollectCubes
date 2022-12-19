@@ -29,9 +29,11 @@ namespace _Game.Scripts
             InputManager.Instance.PointerEnd -= HandleOnPointerEnd;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             characterType = CharacterType.PLAYER;
+            initialPosition = transform.position;
+            initialRotation = transform.rotation;
             gameManager = FindObjectOfType<GameManager>();
             inputManager = FindObjectOfType<InputManager>();
             uiManager = FindObjectOfType<UIManager>();

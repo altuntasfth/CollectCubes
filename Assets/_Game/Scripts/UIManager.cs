@@ -145,7 +145,7 @@ namespace _Game.Scripts
             {
                 levelManager.StartToSpawnVoxels(1);
             }
-            else if (gameManager.gameMode == GameManager.GameMode.AI)
+            else if (gameManager.gameMode == GameManager.GameMode.AI || gameManager.gameMode == GameManager.GameMode.AIObstacle)
             {
                 levelManager.StartToSpawnVoxels(3);
             }
@@ -236,14 +236,19 @@ namespace _Game.Scripts
 
         #region BUTTONACTIONS
 
+        private void ClearAndReload()
+        {
+            DOTween.KillAll();
+            DOTween.Clear();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         public void StandardGameModeButton()
         {
             PlayerPrefs.SetInt("LevelModeIndex", 0);
             PlayerPrefs.Save();
             
-            DOTween.KillAll();
-            DOTween.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ClearAndReload();
         }
         
         public void TimerGameModeButton()
@@ -251,9 +256,7 @@ namespace _Game.Scripts
             PlayerPrefs.SetInt("LevelModeIndex", 1);
             PlayerPrefs.Save();
             
-            DOTween.KillAll();
-            DOTween.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ClearAndReload();
         }
         
         public void AIGameModeButton()
@@ -261,18 +264,22 @@ namespace _Game.Scripts
             PlayerPrefs.SetInt("LevelModeIndex", 2);
             PlayerPrefs.Save();
             
-            DOTween.KillAll();
-            DOTween.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ClearAndReload();
+        }
+        
+        public void AIWithObstacleGameModeButton()
+        {
+            PlayerPrefs.SetInt("LevelModeIndex", 3);
+            PlayerPrefs.Save();
+            
+            ClearAndReload();
         }
         
         public void ClearPlayerPrefsButton()
         {
             PlayerPrefs.DeleteAll();
             
-            DOTween.KillAll();
-            DOTween.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ClearAndReload();
         }
 
         public void SettingButton()

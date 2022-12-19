@@ -39,12 +39,17 @@ namespace _Game.Scripts.AI
 
             if (closestVoxel != null)
             {
-                // ai.agent.SetDestination(closestVoxel.transform.position);
-                
-                Vector3 directionToClosestVoxel = (closestVoxel.transform.position - ai.transform.position).normalized;
-                ai.transform.forward = Vector3.Lerp(ai.transform.forward,
-                    directionToClosestVoxel.ProjectOntoPlane(Vector3.up), ai.rotationSpeed * Time.deltaTime);
-                ai.rb.velocity = directionToClosestVoxel * ai.velocityMultiplier * Time.fixedDeltaTime;
+                if (ai.aiType == AIMechanic.AIType.OBSTACLE)
+                {
+                    ai.agent.SetDestination(closestVoxel.transform.position);
+                }
+                else
+                {
+                    Vector3 directionToClosestVoxel = (closestVoxel.transform.position - ai.transform.position).normalized;
+                    ai.transform.forward = Vector3.Lerp(ai.transform.forward,
+                        directionToClosestVoxel.ProjectOntoPlane(Vector3.up), ai.rotationSpeed * Time.deltaTime);
+                    ai.rb.velocity = directionToClosestVoxel * ai.velocityMultiplier * Time.fixedDeltaTime;
+                }
             }
         }
 

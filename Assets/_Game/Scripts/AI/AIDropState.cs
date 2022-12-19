@@ -33,10 +33,16 @@ namespace _Game.Scripts.AI
 
         private void Drop()
         {
-            // ai.agent.SetDestination(ai.collector.transform.position);
-            Vector3 directionToCollector = (ai.collector.transform.position - ai.transform.position).normalized;
-            ai.transform.forward = directionToCollector.ProjectOntoPlane(Vector3.up);
-            ai.rb.velocity = directionToCollector * ai.velocityMultiplier * Time.fixedDeltaTime;
+            if (ai.aiType == AIMechanic.AIType.OBSTACLE)
+            {
+                ai.agent.SetDestination(ai.collector.transform.position);
+            }
+            else
+            {
+                Vector3 directionToCollector = (ai.collector.transform.position - ai.transform.position).normalized;
+                ai.transform.forward = directionToCollector.ProjectOntoPlane(Vector3.up);
+                ai.rb.velocity = directionToCollector * ai.velocityMultiplier * Time.fixedDeltaTime;
+            }
         }
     }
 }

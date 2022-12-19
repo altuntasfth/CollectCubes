@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts;
 using UnityEngine;
 using CharacterController = _Game.Scripts.CharacterController;
 
@@ -27,6 +28,19 @@ public class VoxelHolder : MonoBehaviour
                     : LayerMask.NameToLayer("HeldVoxelByAI");
             
                 heldVoxels.Add(voxel);
+            }
+        }
+
+        ObstacleEntity obstacle = other.gameObject.GetComponent<ObstacleEntity>();
+        if (obstacle)
+        {
+            character.transform.position = character.initialPosition;
+            character.transform.rotation = character.initialRotation;
+            
+            for (var i = 0; i < heldVoxels.Count; i++)
+            {
+                heldVoxels[i].isHeld = false;
+                heldVoxels[i].gameObject.layer = LayerMask.NameToLayer("Voxel");
             }
         }
     }
@@ -56,7 +70,7 @@ public class VoxelHolder : MonoBehaviour
             
                 if (!voxel.isCollected)
                 {
-                    voxel.gameObject.layer = LayerMask.NameToLayer("Default");
+                    voxel.gameObject.layer = LayerMask.NameToLayer("Voxel");
                 }
                 else
                 {

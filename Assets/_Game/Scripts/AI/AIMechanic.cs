@@ -25,9 +25,24 @@ namespace _Game.Scripts.AI
         private float targetVelocity = 10f;
         private float rayRange = 2f;
 
-        public void Initialize()
+        public enum AIType
+        {
+            NORMAL,
+            OBSTACLE,
+        }
+
+        public AIType aiType;
+
+        public override void Initialize()
         {
             characterType = CharacterType.AI;
+            initialPosition = transform.position;
+            initialRotation = transform.rotation;
+
+            if (FindObjectOfType<GameManager>().gameMode == GameManager.GameMode.AIObstacle)
+            {
+                agent.enabled = true;
+            }
             
             mainStateMachine = new StateMachine();
             
@@ -85,6 +100,22 @@ namespace _Game.Scripts.AI
                 else
                 {
                     deltaPosition += (1f / numberOfRay) * targetVelocity * direction;
+                }
+            }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            ObstacleEntity obstacle = other.gameObject.GetComponent<ObstacleEntity>();
+            if (obstacle)
+            {
+                transform.position = initialPosition;
+                transform.rotation = initialRotation;
+                
+                for (var i = 0; i < voxelHolder.heldVoxels.Count; i++)
+                {
+                    voxelHolder.heldVoxels[i].isHeld = false;
+                    voxelHolder.heldVoxels[i].gameObject.layer = LayerMask.NameToLayer("Voxel");
                 }
             }
         }

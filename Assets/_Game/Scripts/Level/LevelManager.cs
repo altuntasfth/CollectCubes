@@ -39,6 +39,10 @@ namespace _Game.Scripts.Level
                 case GameManager.GameMode.AI:
                     GenerateAILevel();
                     break;
+                
+                case GameManager.GameMode.AIObstacle:
+                    GenerateAILevel();
+                    break;
             }
         }
 

@@ -103,21 +103,5 @@ namespace _Game.Scripts.AI
                 }
             }
         }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            ObstacleEntity obstacle = other.gameObject.GetComponent<ObstacleEntity>();
-            if (obstacle)
-            {
-                transform.position = initialPosition;
-                transform.rotation = initialRotation;
-                
-                for (var i = 0; i < voxelHolder.heldVoxels.Count; i++)
-                {
-                    voxelHolder.heldVoxels[i].isHeld = false;
-                    voxelHolder.heldVoxels[i].gameObject.layer = LayerMask.NameToLayer("Voxel");
-                }
-            }
-        }
     }
 }

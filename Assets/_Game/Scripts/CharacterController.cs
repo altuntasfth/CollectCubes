@@ -26,5 +26,21 @@ namespace _Game.Scripts
         public float rotateSpeed = 15f;
 
         public abstract void Initialize();
+        
+        private void OnCollisionEnter(Collision other)
+        {
+            ObstacleEntity obstacle = other.gameObject.GetComponent<ObstacleEntity>();
+            if (obstacle)
+            {
+                transform.position = initialPosition;
+                transform.rotation = initialRotation;
+                
+                for (var i = 0; i < voxelHolder.heldVoxels.Count; i++)
+                {
+                    voxelHolder.heldVoxels[i].isHeld = false;
+                    voxelHolder.heldVoxels[i].gameObject.layer = LayerMask.NameToLayer("Voxel");
+                }
+            }
+        }
     }
 }

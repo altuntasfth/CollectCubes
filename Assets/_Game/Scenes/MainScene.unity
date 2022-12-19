@@ -603,8 +603,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 62709660}
-  - component: {fileID: 62709661}
   - component: {fileID: 62709664}
+  - component: {fileID: 62709665}
   m_Layer: 9
   m_Name: VoxelHolder
   m_TagString: Untagged
@@ -627,19 +627,6 @@ Transform:
   m_Father: {fileID: 5496126710549016306}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &62709661
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 62709659}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 3
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &62709664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,8 +641,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 5496126710551883479}
   gravityMultiplier: 200
-  holderCollider: {fileID: 62709661}
+  holderCollider: {fileID: 62709665}
   heldVoxels: []
+--- !u!65 &62709665
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62709659}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 6}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &177613988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1469,7 +1469,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.60214466, y: 0.00000005537702, z: -0.00000004176542, w: 0.79838705}
+  m_LocalRotation: {x: 0.60214466, y: -0.000000055377026, z: 0.000000041765425, w: 0.79838705}
   m_LocalPosition: {x: 0, y: 62.2, z: -21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9056,8 +9056,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 868567897}
-  - component: {fileID: 868567899}
   - component: {fileID: 868567898}
+  - component: {fileID: 868567899}
   m_Layer: 10
   m_Name: VoxelHolder
   m_TagString: Untagged
@@ -9096,8 +9096,8 @@ MonoBehaviour:
   gravityMultiplier: 200
   holderCollider: {fileID: 868567899}
   heldVoxels: []
---- !u!135 &868567899
-SphereCollider:
+--- !u!65 &868567899
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -9107,7 +9107,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
+  m_Size: {x: 6, y: 6, z: 6}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &959707165
 GameObject:
@@ -9481,7 +9481,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113547569}
-  m_LocalRotation: {x: 0.60214466, y: 0.00000005537702, z: -0.00000004176542, w: 0.79838705}
+  m_LocalRotation: {x: 0.60214466, y: -0.000000055377026, z: 0.000000041765425, w: 0.79838705}
   m_LocalPosition: {x: 0, y: 62.2, z: -21.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

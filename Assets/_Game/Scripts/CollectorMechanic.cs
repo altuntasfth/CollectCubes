@@ -11,11 +11,9 @@ namespace _Game.Scripts
         public LevelManager levelManager;
         public Color color;
         public UIManager uiManager;
-        public PlayerMechanic player;
+        public CharacterController character;
         public float forceToOrigin = 3f;
         
-        public SphereCollider sphereCollider;
-
         private void OnTriggerEnter(Collider other)
         {
             VoxelEntity voxel = other.gameObject.GetComponent<VoxelEntity>();
@@ -29,9 +27,8 @@ namespace _Game.Scripts
                 voxel.rb.AddForce((transform.position - voxel.transform.position) * forceToOrigin, ForceMode.Impulse);
                 
                 levelManager.voxels.Remove(voxel.gameObject);
-                player.collectedVoxelCount++;
-                uiManager.gameplayMoneyBarText.text = 
-                    (uiManager.totalMoneyAmount + player.collectedVoxelCount).ToString();
+                character.collectedVoxelCount++;
+                character.collectedVoxelCounterTMP.text = (character.collectedVoxelCount).ToString();
 
                 if (levelManager.voxels.Count == 0)
                 {

@@ -15,9 +15,9 @@ TagManager:
   - Voxel
   - CollectedVoxel
   - Player
-  - 
-  - 
-  - 
+  - AI
+  - HeldVoxelByPlayer
+  - HeldVoxelByAI
   - 
   - 
   - 

@@ -4,11 +4,8 @@ using UnityEngine.EventSystems;
 
 namespace _Game.Scripts
 {
-    public class PlayerMechanic : MonoBehaviour
+    public class PlayerMechanic : CharacterController
     {
-        public float velocityMultiplier = 1500f;
-        public Rigidbody rb;
-        public int collectedVoxelCount;
         private GameManager gameManager;
         private UIManager uiManager;
         private InputManager inputManager;
@@ -34,6 +31,7 @@ namespace _Game.Scripts
 
         public void Initialize()
         {
+            isPlayer = true;
             gameManager = FindObjectOfType<GameManager>();
             inputManager = FindObjectOfType<InputManager>();
             uiManager = FindObjectOfType<UIManager>();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.AI;
 using _Game.Scripts.Pool;
 using Cinemachine.Utility;
 using DG.Tweening;
@@ -32,7 +33,7 @@ namespace _Game.Scripts.Level
                     break;
                 
                 case GameManager.GameMode.TIME:
-                    
+                    GenerateTimerLevel();
                     break;
                 
                 case GameManager.GameMode.AI:
@@ -76,15 +77,17 @@ namespace _Game.Scripts.Level
 
         public void GenerateTimerLevel()
         {
-            StartToSpawnVoxels(1);
+            
         }
 
         private void GenerateAILevel()
         {
-            StartToSpawnVoxels(3);
+            ai.SetActive(true);
+            aiCollector.SetActive(true);
+            ai.GetComponent<AIMechanic>().Initialize();
         }
 
-        private void StartToSpawnVoxels(int spawnCountOnOneFrame)
+        public void StartToSpawnVoxels(int spawnCountOnOneFrame)
         {
             DOVirtual.DelayedCall(voxelSpawnDelayTime, () =>
             {

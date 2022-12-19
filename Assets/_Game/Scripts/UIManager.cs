@@ -23,6 +23,7 @@ namespace _Game.Scripts
         [SerializeField] private TextMeshProUGUI progressBarLevelStartText;
         [SerializeField] private TextMeshProUGUI progressBarLevelEndText;
         public TextMeshProUGUI gameplayMoneyBarText; 
+        public TextMeshProUGUI aiMoneyBarText; 
         [SerializeField] private TextMeshProUGUI timerText; 
         public TextMeshProUGUI levelCompleteText;
         
@@ -58,6 +59,7 @@ namespace _Game.Scripts
         [SerializeField] private GameObject timerTutorialUI;
         [SerializeField] private GameObject aiTutorialUI;
         [SerializeField] private GameObject settingBackgroundUI;
+        [SerializeField] private GameObject moneyBarUI;
         public CanvasGroup levelCompletedScreenUI;
         public GameObject levelCompletedConfetti;
 
@@ -141,7 +143,11 @@ namespace _Game.Scripts
 
             if (gameManager.gameMode == GameManager.GameMode.TIME)
             {
-                levelManager.GenerateTimerLevel();
+                levelManager.StartToSpawnVoxels(1);
+            }
+            else if (gameManager.gameMode == GameManager.GameMode.AI)
+            {
+                levelManager.StartToSpawnVoxels(3);
             }
         }
 
@@ -161,6 +167,7 @@ namespace _Game.Scripts
 
         private void InitializeTimeGameMode()
         {
+            gameplayMoneyBarText.text = "0";
             timerUI.SetActive(true);
             
             float milliSeconds = (timer % 1) * 100;
@@ -171,6 +178,9 @@ namespace _Game.Scripts
 
         private void InitializeAIGameMode()
         {
+            gameplayMoneyBarText.text = "0";
+            aiMoneyBarText.text = "0";
+            moneyBarUI.GetComponent<RectTransform>().localPosition = new Vector3(-106, -220, 0);
             timerUI.SetActive(true);
             
             float milliSeconds = (timer % 1) * 100;

@@ -99,13 +99,21 @@ namespace _Game.Scripts
             DOTween.KillAll();
             DOTween.Clear();
             
-            uiManager.progressBarFillImage.fillAmount = 1f;
-            uiManager.levelCompleteText.text = "LEVEL " + normalizedLevelIndex + "\nCOMPLETED";
+            if (gameMode == GameMode.STANDARD)
+            {
+                uiManager.progressBarFillImage.fillAmount = 1f;
+                uiManager.levelCompleteText.text = "LEVEL " + normalizedLevelIndex + "\nCOMPLETED";
+                
+                int newMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount") + player.collectedVoxelCount;
+                PlayerPrefs.SetInt("TotalMoneyAmount", newMoneyAmount);
+                PlayerPrefs.SetInt("LevelIndex", levelIndex + 1);
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                uiManager.levelCompleteText.text = gameMode.ToString()+ " GAME MODE " + "\nCOMPLETED";
 
-            int newMoneyAmount = PlayerPrefs.GetInt("TotalMoneyAmount") + player.collectedVoxelCount;
-            PlayerPrefs.SetInt("TotalMoneyAmount", newMoneyAmount);
-            PlayerPrefs.SetInt("LevelIndex", levelIndex + 1);
-            PlayerPrefs.Save();
+            }
             
             uiManager.levelCompletedScreenUI.gameObject.SetActive(true);
             uiManager.levelCompletedConfetti.SetActive(true);

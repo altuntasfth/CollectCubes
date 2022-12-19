@@ -131,3 +131,4 @@ MonoBehaviour:
   meshRenderer: {fileID: 5708656520732851645}
   isCollected: 0
   isHeld: 0
+  heldType: 2

@@ -20,8 +20,9 @@ public class VoxelHolder : MonoBehaviour
             if (!voxel.isHeld && !voxel.isCollected)
             {
                 voxel.isHeld = true;
+                voxel.heldType = character.characterType;
             
-                voxel.gameObject.layer = character.isPlayer
+                voxel.gameObject.layer = character.characterType == CharacterController.CharacterType.PLAYER
                     ? LayerMask.NameToLayer("HeldVoxelByPlayer")
                     : LayerMask.NameToLayer("HeldVoxelByAI");
             
@@ -51,6 +52,7 @@ public class VoxelHolder : MonoBehaviour
             if (voxel.isHeld)
             {
                 voxel.isHeld = false;
+                voxel.heldType = CharacterController.CharacterType.NULL;
             
                 if (!voxel.isCollected)
                 {

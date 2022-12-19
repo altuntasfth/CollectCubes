@@ -31,7 +31,7 @@ namespace _Game.Scripts
 
         public void Initialize()
         {
-            isPlayer = true;
+            characterType = CharacterType.PLAYER;
             gameManager = FindObjectOfType<GameManager>();
             inputManager = FindObjectOfType<InputManager>();
             uiManager = FindObjectOfType<UIManager>();

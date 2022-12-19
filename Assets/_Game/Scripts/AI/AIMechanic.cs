@@ -2,11 +2,13 @@ using System;
 using _Game.Scripts.Level;
 using FSM;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace _Game.Scripts.AI
 {
     public class AIMechanic : CharacterController
     {
+        public NavMeshAgent agent;
         public float rotationSpeed = 10f;
         public int needToDropVoxelsAmount = 10;
 
@@ -15,9 +17,17 @@ namespace _Game.Scripts.AI
         public StateMachine mainStateMachine;
         public bool isInitialized;
 
+        [Range(0.5f, 1f)]
+        public float challengingFactor = 0.5f;
+        
+        private int numberOfRay = 15;
+        private float angle = 90f;
+        private float targetVelocity = 10f;
+        private float rayRange = 2f;
+
         public void Initialize()
         {
-            isPlayer = false;
+            characterType = CharacterType.AI;
             
             mainStateMachine = new StateMachine();
             
@@ -53,6 +63,30 @@ namespace _Game.Scripts.AI
             }
             
             mainStateMachine.OnLogic();
+        }
+
+        private void ObstacleAvoidance()
+        {
+            var deltaPosition = Vector3.zero;
+            for (int i = 0; i < numberOfRay; i++)
+            {
+                var rotation = transform.rotation;
+                var rotationMode =
+                    Quaternion.AngleAxis((i / ((float)numberOfRay - 1)) * angle * 2 - angle, transform.up);
+                var direction = rotation * rotationMode * Vector3.forward;
+
+                var ray = new Ray(transform.position, direction);
+                RaycastHit hitInfo;
+
+                if (Physics.Raycast(ray, out  hitInfo, rayRange))
+                {
+                    deltaPosition -= (1f / numberOfRay) * targetVelocity * direction;
+                }
+                else
+                {
+                    deltaPosition += (1f / numberOfRay) * targetVelocity * direction;
+                }
+            }
         }
     }
 }

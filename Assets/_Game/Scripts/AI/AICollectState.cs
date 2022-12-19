@@ -5,6 +5,8 @@ namespace _Game.Scripts.AI
 {
     public class AICollectState : AIBaseState
     {
+        private VoxelEntity closestVoxel;
+        
         public AICollectState(AIMechanic ai, bool needsExitTime) : base(ai, needsExitTime)
         {
         }
@@ -30,23 +32,15 @@ namespace _Game.Scripts.AI
 
         private void CollectVoxels()
         {
-            VoxelEntity closestVoxel = null;
-            
             if (Time.frameCount % 60 == 0)
-            {
-                if (ai.levelManager.voxels.Count != 0)
-                {
-                    closestVoxel = ai.levelManager.voxels[Random.Range(0, ai.levelManager.voxels.Count - 1)].
-                        GetComponent<VoxelEntity>();
-                }
-            }
-            else
             {
                 closestVoxel = GetClosestVoxel();
             }
 
             if (closestVoxel != null)
             {
+                // ai.agent.SetDestination(closestVoxel.transform.position);
+                
                 Vector3 directionToClosestVoxel = (closestVoxel.transform.position - ai.transform.position).normalized;
                 ai.transform.forward = Vector3.Lerp(ai.transform.forward,
                     directionToClosestVoxel.ProjectOntoPlane(Vector3.up), ai.rotationSpeed * Time.deltaTime);
@@ -56,8 +50,8 @@ namespace _Game.Scripts.AI
 
         private VoxelEntity GetClosestVoxel()
         {
-            VoxelEntity closestVoxel = null;
-            float minDistance = 99999f;
+            VoxelEntity closestVoxelEntity = null;
+            /*float minDistance = 99999f;
             
             for (var i = 0; i < ai.levelManager.voxels.Count; i++)
             {
@@ -72,9 +66,20 @@ namespace _Game.Scripts.AI
                         closestVoxel = voxel;
                     }
                 }
+            }*/
+            
+            while (closestVoxelEntity == null)
+            {
+                VoxelEntity voxel = ai.levelManager.voxels[Random.Range(0, ai.levelManager.voxels.Count - 1)].
+                    GetComponent<VoxelEntity>();
+
+                if (!voxel.isHeld)
+                {
+                    closestVoxelEntity = voxel;
+                }
             }
 
-            return closestVoxel;
+            return closestVoxelEntity;
         }
     }
 }

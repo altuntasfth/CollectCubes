@@ -92,6 +92,9 @@ namespace _Game.Scripts
                 case GameManager.GameMode.AI:
                     InitializeAIGameMode();
                     break;
+                case GameManager.GameMode.AIObstacle:
+                    InitializeAIGameMode();
+                    break;
             }
 
             timer = levelManager.timer;

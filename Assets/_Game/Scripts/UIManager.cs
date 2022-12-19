@@ -204,6 +204,7 @@ namespace _Game.Scripts
 
             if (timer <= 0.001f)
             {
+                timerText.text = "00:00";
                 gameManager.HandleLevelComplete();
             }
         }
@@ -214,6 +215,7 @@ namespace _Game.Scripts
             
             if (timer <= 0.001f)
             {
+                timerText.text = "00:00";
                 gameManager.HandleLevelComplete();
             }
         }

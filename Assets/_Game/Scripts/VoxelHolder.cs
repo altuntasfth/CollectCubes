@@ -9,7 +9,7 @@ public class VoxelHolder : MonoBehaviour
 {
     public CharacterController character;
     [SerializeField] private float gravityMultiplier = 200f;
-    [SerializeField] private SphereCollider holderCollider;
+    [SerializeField] private BoxCollider holderCollider;
 
     public List<VoxelEntity> heldVoxels;
 
@@ -52,7 +52,7 @@ public class VoxelHolder : MonoBehaviour
         {
             if (voxel.isHeld && !voxel.isCollected)
             {
-                float gravityIntensity = Vector3.Distance(transform.position, voxel.transform.position) / holderCollider.radius;
+                float gravityIntensity = Vector3.Distance(transform.position, voxel.transform.position) / holderCollider.size.x / 2f;
                 other.attachedRigidbody.AddForce((transform.position - voxel.transform.position) * gravityIntensity * gravityMultiplier * Time.fixedDeltaTime);
             }
         }

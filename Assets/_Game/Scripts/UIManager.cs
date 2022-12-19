@@ -120,6 +120,9 @@ namespace _Game.Scripts
                 case GameManager.GameMode.AI:
                     UpdateAIGameMode();
                     break;
+                case GameManager.GameMode.AIObstacle:
+                    UpdateAIGameMode();
+                    break;
             }
         }
         

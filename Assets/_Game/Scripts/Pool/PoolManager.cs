@@ -40,6 +40,13 @@ namespace _Game.Scripts.Pool
             }
             
             //GeneratePools();
+
+            for (var i = 0; i < maxPoolSize; i++)
+            {
+                GameObject item = CreatePooledItem();
+                poolItems.Add(item);
+                Pool.Release(item);
+            }
         }
 
         private void Update()

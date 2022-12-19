@@ -102,7 +102,7 @@ namespace _Game.Scripts.Level
                     voxelOrigin.transform.localPosition = Vector3.zero;
                     voxel.transform.parent = voxelOrigin;
                     voxel.transform.localPosition =
-                        (Random.insideUnitSphere * 2f).ProjectOntoPlane(Vector3.up) + 5f * Vector3.up +
+                        (Random.insideUnitSphere * 2f).ProjectOntoPlane(Vector3.up) +
                         xMultiplier * Vector3.right;
 
                     voxels.Add(voxel);
